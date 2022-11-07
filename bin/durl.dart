@@ -20,8 +20,8 @@ void main(List<String> args) {
     "durl",
     "A curl-like authenticated REST client pointed at Discord's API",
   )
-    ..addCommand(AuthCommand())
-    ..addCommand(BotAuthCommand())
+    ..addCommand(AuthUserCommand())
+    ..addCommand(AuthBotCommand())
     ..addCommand(TokenRefreshCommand())
     ..addCommand(ApiCommand())
     ..run(args);
@@ -45,6 +45,7 @@ class ApiCommand extends Command {
         defaultsTo: "bot",
         allowed: ["bot", "user"],
       )
+      ..addFlag("silent", defaultsTo: false, help: "Suppress STDOUT")
       ..addOption("path", abbr: "p", mandatory: true)
       ..addOption("version", abbr: "v", defaultsTo: "10")
       ..addOption("headers", abbr: "H", defaultsTo: "{}", help: "JSON encoded")
@@ -91,15 +92,15 @@ class ApiCommand extends Command {
         break;
     }
 
-    print(res.body);
+    if (!argResults?['silent']) print(res.body);
   }
 }
 
-class AuthCommand extends Command {
-  final name = "auth";
-  final description = "Authenticate via Oauth";
+class AuthUserCommand extends Command {
+  final name = "auth-user";
+  final description = "Authenticate user via Oauth";
 
-  AuthCommand() {
+  AuthUserCommand() {
     argParser
       ..addOption("client_id", abbr: "i", mandatory: true)
       ..addOption("client_secret", abbr: "s", mandatory: true)
@@ -161,11 +162,11 @@ class AuthCommand extends Command {
   }
 }
 
-class BotAuthCommand extends Command {
-  final name = "bot-auth";
-  final description = "Authenticate via bot Oauth";
+class AuthBotCommand extends Command {
+  final name = "auth";
+  final description = "Authenticate bot via Oauth";
 
-  BotAuthCommand() {
+  AuthBotCommand() {
     argParser
       ..addOption("client_id", abbr: "i", mandatory: true)
       ..addOption("bot_token", abbr: "t", mandatory: true)
