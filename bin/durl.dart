@@ -163,7 +163,7 @@ class AuthCommand extends Command {
 
 class BotAuthCommand extends Command {
   final name = "bot-auth";
-  final description = "Authenticate via Oauth";
+  final description = "Authenticate via bot Oauth";
 
   BotAuthCommand() {
     argParser
