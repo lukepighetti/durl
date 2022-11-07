@@ -37,4 +37,10 @@ own work.
 
 ## Contributing
 
-This project is intended to be *very simple*.
+This project is intended to be *very simple*, that said, here are some missing
+features:
+
+1. Support for operating systems that don't use *nix style paths.
+See [durl.dart:13](https://github.com/lukepighetti/durl/blob/main/bin/durl.dart#L13-L16)
+2. Automatically refresh the user token when it expires.
+See [durl.dart:195](https://github.com/lukepighetti/durl/blob/main/bin/durl.dart#L195-L225)
