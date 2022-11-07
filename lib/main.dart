@@ -11,6 +11,7 @@ import 'package:shelf/shelf_io.dart';
 import 'package:http/http.dart' as http;
 
 final appDir = Directory("${Platform.environment['HOME']}/.config/durl");
+final botTokenFile = File("${appDir.path}/bot-token.json");
 final clientFile = File("${appDir.path}/client.json");
 final tokenFile = File("${appDir.path}/token.json");
 
@@ -20,6 +21,7 @@ void main(List<String> args) {
     "A curl-like authenticated REST client pointed at Discord's API",
   )
     ..addCommand(AuthCommand())
+    ..addCommand(BotAuthCommand())
     ..addCommand(TokenRefreshCommand())
     ..addCommand(ApiCommand())
     ..run(args);
@@ -37,6 +39,12 @@ class ApiCommand extends Command {
         defaultsTo: "get",
         allowed: ["get", "post", "put", "patch", "delete"],
       )
+      ..addOption(
+        "type",
+        abbr: "y",
+        defaultsTo: "bot",
+        allowed: ["bot", "user"],
+      )
       ..addOption("path", abbr: "p", mandatory: true)
       ..addOption("version", abbr: "v", defaultsTo: "10")
       ..addOption("headers", abbr: "H", defaultsTo: "{}", help: "JSON encoded")
@@ -49,11 +57,18 @@ class ApiCommand extends Command {
     final path = argResults?["path"] as String;
     final version = argResults?["version"] as String;
     final body = argResults?["body"] as String;
+    final useBotToken = argResults?["type"] == "bot";
 
     final uri = Uri.parse("https://discord.com/api" "/v$version" "/$path");
-    final token = jsonDecode(tokenFile.readAsStringSync())['access_token'];
+    final token = useBotToken
+        ? botTokenFile.readAsStringSync()
+        : jsonDecode(tokenFile.readAsStringSync())['access_token'];
     final headers = <String, String>{
-      "Authorization": "Bearer $token",
+      if (useBotToken)
+        "Authorization": "Bot $token"
+      else
+        "Authorization": "Bearer $token",
+      "Content-Type": "application/json",
       ...jsonDecode(argResults?["headers"]),
     };
 
@@ -143,6 +158,36 @@ class AuthCommand extends Command {
       "client_id": argResults?["client_id"],
       "client_secret": argResults?["client_secret"],
     }));
+  }
+}
+
+class BotAuthCommand extends Command {
+  final name = "bot-auth";
+  final description = "Authenticate via Oauth";
+
+  BotAuthCommand() {
+    argParser
+      ..addOption("client_id", abbr: "i", mandatory: true)
+      ..addOption("bot_token", abbr: "t", mandatory: true)
+      ..addOption("permissions", abbr: "p", defaultsTo: "8")
+      ..addOption("scope", defaultsTo: "bot");
+  }
+
+  @override
+  Future<void> run() async {
+    // Ask the user to follow a link to request an auth code redirect
+    final url = Uri.parse(
+      "https://discord.com/api/oauth2/authorize"
+      "?client_id=${argResults?['client_id']}"
+      "&permissions=${argResults?['permissions']}"
+      "&scope=${argResults?['scope']}",
+    );
+
+    print("Authenticate by clicking this link $url");
+
+    // Save the bot token
+    if (!botTokenFile.existsSync()) botTokenFile.createSync();
+    botTokenFile.writeAsStringSync(argResults?["bot_token"]);
   }
 }
 
