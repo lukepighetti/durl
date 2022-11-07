@@ -22,7 +22,7 @@ void main(List<String> args) {
   )
     ..addCommand(AuthUserCommand())
     ..addCommand(AuthBotCommand())
-    ..addCommand(TokenRefreshCommand())
+    ..addCommand(UserTokenRefreshCommand())
     ..addCommand(ApiCommand())
     ..run(args);
 }
@@ -192,9 +192,9 @@ class AuthBotCommand extends Command {
   }
 }
 
-class TokenRefreshCommand extends Command {
+class UserTokenRefreshCommand extends Command {
   final name = "token-refresh";
-  final description = "Refresh the auth token on file";
+  final description = "Refresh the user auth token on file";
 
   Future<void> run() async {
     final clientInfo = jsonDecode(clientFile.readAsStringSync());
