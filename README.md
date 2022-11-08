@@ -54,6 +54,6 @@ This project is intended to be *very simple*, that said, here are some missing
 features:
 
 1. Support for operating systems that don't use *nix style paths.
-See [durl.dart:13](https://github.com/lukepighetti/durl/blob/main/bin/durl.dart#L13-L16)
+See [durl.dart:11](https://github.com/lukepighetti/durl/blob/main/bin/durl.dart#L11-L14)
 2. Automatically refresh the user token when it expires.
-See [durl.dart:195](https://github.com/lukepighetti/durl/blob/main/bin/durl.dart#L195-L225)
+See [durl.dart:202](https://github.com/lukepighetti/durl/blob/main/bin/durl.dart#L202-L236)
