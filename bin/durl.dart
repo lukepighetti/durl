@@ -49,7 +49,7 @@ class ApiCommand extends Command {
       ..addOption("path", abbr: "p", mandatory: true)
       ..addOption("version", abbr: "v", defaultsTo: "10")
       ..addOption("headers", abbr: "H", defaultsTo: "{}", help: "JSON encoded")
-      ..addOption("body", abbr: "b", defaultsTo: "");
+      ..addOption("body", abbr: "b", defaultsTo: "", help: "JSON encoded");
   }
 
   @override
