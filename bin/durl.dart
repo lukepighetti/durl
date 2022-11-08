@@ -183,7 +183,7 @@ class AuthBotCommand extends Command {
 
   @override
   Future<void> run() async {
-    // Ask the user to follow a link to request an auth code redirect
+    // Ask the user to follow a link to complete bot authentication
     final url = Uri.parse(
       "https://discord.com/api/oauth2/authorize"
       "?client_id=${argResults?['client_id']}"
