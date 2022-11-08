@@ -1,5 +1,3 @@
-// ignore_for_file: annotate_overrides, avoid_single_cascade_in_expression_statements
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -28,7 +26,10 @@ void main(List<String> args) {
 }
 
 class ApiCommand extends Command {
+  @override
   final name = "api";
+
+  @override
   final description = "Dispatch an API request";
 
   ApiCommand() {
@@ -97,7 +98,10 @@ class ApiCommand extends Command {
 }
 
 class AuthUserCommand extends Command {
+  @override
   final name = "auth-user";
+
+  @override
   final description = "Authenticate user via Oauth";
 
   AuthUserCommand() {
@@ -163,7 +167,10 @@ class AuthUserCommand extends Command {
 }
 
 class AuthBotCommand extends Command {
+  @override
   final name = "auth";
+
+  @override
   final description = "Authenticate bot via Oauth";
 
   AuthBotCommand() {
@@ -193,9 +200,13 @@ class AuthBotCommand extends Command {
 }
 
 class UserTokenRefreshCommand extends Command {
+  @override
   final name = "token-refresh";
+
+  @override
   final description = "Refresh the user auth token on file";
 
+  @override
   Future<void> run() async {
     final clientInfo = jsonDecode(clientFile.readAsStringSync());
     final token = jsonDecode(tokenFile.readAsStringSync());
