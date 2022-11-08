@@ -24,8 +24,18 @@ implemented under `durl auth-user`
 ```
 dart pub global activate --source git https://github.com/lukepighetti/durl
 durl auth
+```
+
+## Examples
+
+```
+# Fetch my user info with a GET request
 durl api -p /users/@me
+
+# Send message with a POST request
 durl api -X post -p "/channels/101503/messages" -b "{\"content\":\"hellooo!\"}"
+
+# Update guild icon with base64 image in a PATCH request
 durl api -X patch -p "/guilds/101429" -b "{\"icon\":\"data:image/jpeg;base64,$(base64 -i avatar.jpg)\"}"
 ```
 
