@@ -13,7 +13,7 @@ A curl-like command-line client for Discord bot and user APIs.
 ## Requirements
 
 - You must have Dart installed on your system
-- You must have a Discord app created
+- You must have a [Discord app](https://discord.com/developers/applications)
 
 A bot account is HIGHLY RECOMMENDED. User accounts are severely limited by
 Discord's API and Terms of Service. That said, a full user Oauth2 flow is
@@ -23,7 +23,7 @@ implemented under `durl auth-user`
 
 ```bash
 dart pub global activate --source git https://github.com/lukepighetti/durl
-durl auth
+durl auth -i $APPLICATION_ID -t $BOT_TOKEN
 ```
 
 ## Examples
@@ -41,9 +41,12 @@ durl api -X patch -p "/guilds/101429" -b "{\"icon\":\"data:image/jpeg;base64,$(b
 
 ## Tips
 
-`durl` was built to make it easier to write shell scripts that control a
-Discord server. `jq` is an amazing tool and it's absolutely essential in my
-own work.
+Use `jq` to parse response objects when using `durl` to write shell scripts.
+
+```bash
+# Fetch the authenticated user id and store it
+USER_ID=$(durl api -p /users/@me | jq -r ".id")
+```
 
 ## Contributing
 
