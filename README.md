@@ -21,14 +21,14 @@ implemented under `durl auth-user`
 
 ## Installation
 
-```
+```bash
 dart pub global activate --source git https://github.com/lukepighetti/durl
 durl auth
 ```
 
 ## Examples
 
-```
+```bash
 # Fetch my user info with a GET request
 durl api -p /users/@me
 
