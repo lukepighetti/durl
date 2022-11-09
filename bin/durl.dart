@@ -171,6 +171,9 @@ class AuthBotCommand extends Command {
   final name = "auth";
 
   @override
+  final aliases = ["auth-bot"];
+
+  @override
   final description = "Authenticate bot via Oauth";
 
   AuthBotCommand() {
