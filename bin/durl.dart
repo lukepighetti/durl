@@ -8,10 +8,10 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:http/http.dart' as http;
 
-final appDir = Directory("${Platform.environment['HOME']}/.config/durl");
-final botTokenFile = File("${appDir.path}/bot-token.json");
-final clientFile = File("${appDir.path}/client.json");
-final tokenFile = File("${appDir.path}/token.json");
+final storageDir = Directory("${Platform.environment['HOME']}/.config/durl");
+final botTokenFile = File("${storageDir.path}/bot-token.json");
+final clientFile = File("${storageDir.path}/client.json");
+final userTokenFile = File("${storageDir.path}/user-token.json");
 
 void main(List<String> args) {
   CommandRunner(
@@ -64,7 +64,7 @@ class ApiCommand extends Command {
     final uri = Uri.parse("https://discord.com/api" "/v$version" "/$path");
     final token = useBotToken
         ? jsonDecode(botTokenFile.readAsStringSync())
-        : jsonDecode(tokenFile.readAsStringSync())['access_token'];
+        : jsonDecode(userTokenFile.readAsStringSync())['access_token'];
     final headers = <String, String>{
       if (useBotToken)
         "Authorization": "Bot $token"
@@ -153,8 +153,8 @@ class AuthUserCommand extends Command {
       print("Did not receive a refresh token. res.body: ${res.body}");
       return;
     }
-    if (!tokenFile.existsSync()) tokenFile.createSync(recursive: true);
-    tokenFile.writeAsStringSync(res.body);
+    if (!userTokenFile.existsSync()) userTokenFile.createSync(recursive: true);
+    userTokenFile.writeAsStringSync(res.body);
     print("Received auth token");
 
     // Save the client id and secret for later use
@@ -209,7 +209,7 @@ class UserTokenRefreshCommand extends Command {
   @override
   Future<void> run() async {
     final clientInfo = jsonDecode(clientFile.readAsStringSync());
-    final token = jsonDecode(tokenFile.readAsStringSync());
+    final token = jsonDecode(userTokenFile.readAsStringSync());
 
     // Trade offer: I receive auth token, Discord receives refresh token
     final res = await http.post(
@@ -229,8 +229,8 @@ class UserTokenRefreshCommand extends Command {
       print("Did not receive a refresh token. res.body: ${res.body}");
       return;
     }
-    if (!tokenFile.existsSync()) tokenFile.createSync(recursive: true);
-    tokenFile.writeAsStringSync(res.body);
+    if (!userTokenFile.existsSync()) userTokenFile.createSync(recursive: true);
+    userTokenFile.writeAsStringSync(res.body);
     print("Refreshed auth token");
   }
 }
