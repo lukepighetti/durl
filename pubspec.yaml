@@ -1,6 +1,6 @@
 name: durl
 description: A curl-like Discord command line client.
-version: 1.0.0
+version: 1.1.0
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
