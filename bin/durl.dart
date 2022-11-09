@@ -63,7 +63,7 @@ class ApiCommand extends Command {
 
     final uri = Uri.parse("https://discord.com/api" "/v$version" "/$path");
     final token = useBotToken
-        ? botTokenFile.readAsStringSync()
+        ? jsonDecode(botTokenFile.readAsStringSync())
         : jsonDecode(tokenFile.readAsStringSync())['access_token'];
     final headers = <String, String>{
       if (useBotToken)
@@ -195,7 +195,7 @@ class AuthBotCommand extends Command {
 
     // Save the bot token
     if (!botTokenFile.existsSync()) botTokenFile.createSync();
-    botTokenFile.writeAsStringSync(argResults?["bot_token"]);
+    botTokenFile.writeAsStringSync(jsonEncode(argResults?["bot_token"]));
   }
 }
 
